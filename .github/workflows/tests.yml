@@ -29,4 +29,4 @@ jobs:
           go-version: ${{ matrix.go-version }}
 
       - name: Run Tests 0${{ matrix.tests }}
-        run: make run-tests-0${{ matrix.tests }}
+        run: make test
