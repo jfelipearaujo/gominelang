@@ -1,0 +1,11 @@
+version: 0.0.1
+translate:
+  laserio:
+    from: en_us
+    to: pt_br
+    patchouli_books:
+        input: ./mod/src/main/resources/assets/laserio/patchouli_books/laseriobook
+        output: ./mod/src/main/resources/assets/laserio/patchouli_books/laseriobook
+        folders:
+          - categories
+          - entries
