@@ -1,0 +1,24 @@
+issue-845-fix: True
+with-expecter: True
+packages:
+  github.com/jfelipearaujo/gominelang/internal/application/services/translate_tag:
+    config:
+      filename: "{{.InterfaceName|lower}}_mock.go"
+      dir: "./internal/application/services/translate_tag"
+      mockname: "Mock{{.InterfaceName}}"
+      inpackage: True
+      include-regex: "(Service)$"
+  github.com/jfelipearaujo/gominelang/internal/application/services/translate:
+    config:
+      filename: "{{.InterfaceName|lower}}_mock.go"
+      dir: "./internal/application/services/translate"
+      mockname: "Mock{{.InterfaceName}}"
+      inpackage: True
+      include-regex: "(Service)$"
+  github.com/jfelipearaujo/gominelang/internal/application/services/dbhash:
+    config:
+      filename: "{{.InterfaceName|lower}}_mock.go"
+      dir: "./internal/application/services/dbhash"
+      mockname: "Mock{{.InterfaceName}}"
+      inpackage: True
+      include-regex: "(Service)$"

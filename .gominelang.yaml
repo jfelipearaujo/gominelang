@@ -1,0 +1,11 @@
+version: 0.0.1
+translate:
+  laserio:
+    from: en_us
+    to: pt_br
+    lang:
+      input: ./mod/src/generated/resources/assets/laserio/lang
+      output: ./mod/src/main/resources/assets/laserio/lang
+    patchouli_books:
+        input: ./mod/src/main/resources/assets/laserio/patchouli_books/laseriobook
+        output: ./mod/src/main/resources/assets/laserio/patchouli_books/laseriobook

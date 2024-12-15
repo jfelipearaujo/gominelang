@@ -23,3 +23,12 @@ go.work.sum
 
 # env file
 .env
+
+# db
+*.db
+
+# mod example folder
+/mod
+
+# bin folder
+/bin
