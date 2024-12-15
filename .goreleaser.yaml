@@ -2,3 +2,12 @@ builds:
   - main: ./cmd
     id: "gominelang"
     binary: gominelang
+
+release:
+  draft: true
+  replace_existing_draft: true
+  replace_existing_artifacts: true
+  prerelease: auto
+  make_latest: false
+  mode: append
+  name_template: "{{.ProjectName}}-{{.Version}} ({{.Os}}, {{.Arch}}) by {{.Env.USER}}"
