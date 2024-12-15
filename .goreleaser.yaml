@@ -1,0 +1,4 @@
+builds:
+  - main: ./cmd
+    id: "gominelang"
+    binary: gominelang
