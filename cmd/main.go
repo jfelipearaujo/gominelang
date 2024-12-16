@@ -14,11 +14,19 @@ import (
 	"github.com/jfelipearaujo/gominelang/internal/application/services/translate_tag"
 )
 
+// GoMineLangVersion is the version of the cli to be overwritten by goreleaser in the CI run with the version of the release in github
+var GoMineLangVersion string
+
 const (
 	CONFIG_FILE_NAME string = ".gominelang.yaml"
 )
 
 func main() {
+	if os.Args[1] == "version" {
+		fmt.Printf("Version: %s\n", GoMineLangVersion)
+		os.Exit(0)
+	}
+
 	configService := config.New()
 
 	dbhashService := dbhash.New()
