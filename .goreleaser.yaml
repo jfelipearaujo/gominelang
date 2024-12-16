@@ -6,8 +6,6 @@ builds:
     id: "gominelang"
     binary: gominelang
     goos:
-      - darwin
-      - linux
       - windows
     goarch:
       - amd64
