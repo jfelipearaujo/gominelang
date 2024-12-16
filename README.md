@@ -9,13 +9,9 @@ This project was created to help the translation of Mod's content from a languag
 
 ## How to use
 
-To use this CLI, you need to have GoLang installed and then run the following command:
+To use this tool, download the latest release according to your operating system and architecture from the [releases page](https://github.com/jfelipearaujo/gominelang/releases/latest).
 
-```bash
-go install github.com/jfelipearaujo/gominelang@latest
-```
-
-After installed, you can check the version by running:
+After downloaded, you can check the version by running:
 
 ```bash
 gominelang version
