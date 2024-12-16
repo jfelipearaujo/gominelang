@@ -75,3 +75,6 @@ gen-mocks: ## Gen mock files using mockery
 			exit 1; \
 		fi; \
 	fi
+
+lint:
+	golangci-lint run

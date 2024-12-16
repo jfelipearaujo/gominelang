@@ -22,7 +22,7 @@ const (
 )
 
 func main() {
-	if os.Args[1] == "version" {
+	if len(os.Args) > 1 && os.Args[1] == "version" {
 		fmt.Printf("Version: %s\n", GoMineLangVersion)
 		os.Exit(0)
 	}
@@ -30,7 +30,11 @@ func main() {
 	configService := config.New()
 
 	dbhashService := dbhash.New()
-	dbhashService.Open()
+	if err := dbhashService.Open(); err != nil {
+		fmt.Println(err.Error())
+		os.Exit(1)
+	}
+
 	defer dbhashService.Close()
 
 	translateService := translate.New()
