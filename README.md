@@ -15,6 +15,18 @@ To use this CLI, you need to have GoLang installed and then run the following co
 go install github.com/jfelipearaujo/gominelang@latest
 ```
 
+After installed, you can check the version by running:
+
+```bash
+gominelang version
+```
+
+The version will be printed on the screen like this:
+
+```bash
+GoMineLang Version: vX.X.X
+```
+
 Now create the configuration file `.gominelang.yaml` and add your mod configuration.
 
 See [this](./.gominelang.yaml) file as an example.
