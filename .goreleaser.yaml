@@ -9,8 +9,6 @@ builds:
       - windows
     goarch:
       - amd64
-    env:
-      - CGO_ENABLED=1
     ldflags:
       - -s -w -X main.GoMineLangVersion={{.Version}}
 
