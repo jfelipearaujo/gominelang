@@ -15,10 +15,16 @@ import (
 )
 
 const (
+	VERSION          string = "v1.0.5"
 	CONFIG_FILE_NAME string = ".gominelang.yaml"
 )
 
 func main() {
+	if os.Args[1] == "version" {
+		fmt.Printf("GoMineLang Version: %s\n", VERSION)
+		os.Exit(0)
+	}
+
 	configService := config.New()
 
 	dbhashService := dbhash.New()
