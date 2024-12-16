@@ -52,7 +52,7 @@ run:
 	go run ./cmd/main.go
 
 build:
-	go build -race -o ./bin/gominelang -ldflags="-s -w -X main.GoMineLangVersion=v1.0.0" ./cmd/main.go
+	CGO_ENABLED=1 go build -race -o ./bin/gominelang -ldflags="-s -w -X main.GoMineLangVersion=v1.0.0" ./cmd/main.go
 
 install: build
 	go install ./cmd/main.go
