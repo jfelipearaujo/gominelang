@@ -20,7 +20,7 @@ gominelang version
 The version will be printed on the screen like this:
 
 ```bash
-GoMineLang Version: vX.X.X
+Version: vX.X.X
 ```
 
 Now create the configuration file `.gominelang.yaml` and add your mod configuration.
