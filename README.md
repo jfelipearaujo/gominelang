@@ -25,13 +25,44 @@ Version: vX.X.X
 
 Now create the configuration file `.gominelang.yaml` and add your mod configuration.
 
-See [this](./.gominelang.yaml) file as an example.
+See [this](./.gominelang.example.yaml) file as an example.
 
 Then, you can run it by using the following command:
 
 ```bash
 gominelang
 ```
+
+# Translation Engines
+
+### Google Translate
+
+To use Google Translate, you do not need to do anything. Just enable it in your `.gominelang.yaml` file:
+
+```yaml
+engine:
+  google_translate:
+    enabled: true
+```
+
+### OpenAI
+
+To use OpenAI, you need to create an account and get an API key.
+
+Then you need to add the following configuration to your `.gominelang.yaml` file:
+
+```yaml
+engine:
+  open_ai:
+    enabled: true
+    api_key: your-api-key
+```
+
+ATTENTION: The API key is sensitive information, so do not share it with anyone.
+
+## LLM Costs
+
+You don't need to worry about the costs of the translations, because this can check if the translation must be created/updated or not. In the first execution, a `.gominelang.db` file will be created in the same folder of the `.gominelang.yaml` file. This database will be used to store the hashs of the files that have already been translated. If the hash of the file is the same as the one in the database, the file will not be translated again.
 
 ## Contributing
 
