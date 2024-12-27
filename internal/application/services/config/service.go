@@ -6,11 +6,16 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"github.com/hashicorp/go-version"
+	"github.com/jfelipearaujo/gominelang/internal/application/services/translation/engine"
+	"github.com/jfelipearaujo/gominelang/internal/application/services/translation/google_translate"
+	"github.com/jfelipearaujo/gominelang/internal/application/services/translation/open_ai"
 	"github.com/jfelipearaujo/gominelang/internal/domain"
 	"gopkg.in/yaml.v2"
 )
 
 const (
+	// Update this version when you make a breaking change to the config file
+	// and want to force users to update their config file
 	MIN_SUPPORTED_VERSION string = "0.0.1"
 )
 
@@ -49,5 +54,35 @@ func (s *service) Read(configPath string) (*domain.Config, error) {
 		return nil, fmt.Errorf("config file version is too old, please update to %s or higher", MIN_SUPPORTED_VERSION)
 	}
 
+	if err := s.checkEngine(&config); err != nil {
+		return nil, err
+	}
+
 	return &config, nil
+}
+
+func (s *service) checkEngine(config *domain.Config) error {
+	if config.Engine.GoogleTranslate != nil && config.Engine.OpenAI != nil {
+		if !config.Engine.GoogleTranslate.Enabled && !config.Engine.OpenAI.Enabled {
+			return fmt.Errorf("at least one engine must be enabled")
+		}
+
+		if config.Engine.GoogleTranslate.Enabled && config.Engine.OpenAI.Enabled {
+			return fmt.Errorf("only one engine can be enabled at a time")
+		}
+	}
+
+	return nil
+}
+
+func (s *service) GetEngine(config *domain.Config) (engine.Service, error) {
+	if config.Engine.GoogleTranslate != nil && config.Engine.GoogleTranslate.Enabled {
+		return google_translate.New(), nil
+	}
+
+	if config.Engine.OpenAI != nil && config.Engine.OpenAI.Enabled {
+		return open_ai.New(config), nil
+	}
+
+	return nil, fmt.Errorf("no engine is enabled")
 }

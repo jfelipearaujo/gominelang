@@ -1,4 +1,10 @@
 version: 0.0.1
+engine:
+  google_translate:
+    enabled: true
+  open_ai:
+    enabled: true
+    api_key: abc
 translate:
   laserio:
     from: en_us

@@ -1,4 +1,4 @@
-package dbhash
+package db
 
 import "time"
 

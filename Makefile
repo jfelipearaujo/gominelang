@@ -52,7 +52,10 @@ run:
 	go run ./cmd/main.go
 
 build:
-	CGO_ENABLED=1 go build -race -o ./bin/gominelang -ldflags="-s -w -X main.GoMineLangVersion=v1.0.0" ./cmd/main.go
+	go build -race -o ./bin/gominelang -ldflags="-s -w -X main.GoMineLangVersion=v1.0.0" ./cmd/main.go
+
+build-windows:
+	GOOS=windows GOARCH=amd64 CGO_ENABLED=1 CC=x86_64-w64-mingw32-gcc go build -race -o ./bin/gominelang.exe -ldflags="-s -w -X main.GoMineLangVersion=v1.0.12" ./cmd/main.go
 
 install: build
 	go install ./cmd/main.go

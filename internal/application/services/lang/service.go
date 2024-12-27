@@ -1,26 +1,26 @@
-package base_lang
+package lang
 
 import (
 	"encoding/json"
 	"fmt"
 	"os"
 
-	"github.com/jfelipearaujo/gominelang/internal/application/services/dbhash"
-	"github.com/jfelipearaujo/gominelang/internal/application/services/translate"
+	"github.com/jfelipearaujo/gominelang/internal/application/services/db"
+	"github.com/jfelipearaujo/gominelang/internal/application/services/translation/engine"
 	"github.com/jfelipearaujo/gominelang/internal/domain"
 )
 
 type service struct {
-	dbhash    dbhash.Service
-	translate translate.Service
+	db        db.Service
+	translate engine.Service
 
 	fromLang string
 	toLang   string
 }
 
-func New(dbhash dbhash.Service, translate translate.Service) Service {
+func New(db db.Service, translate engine.Service) Service {
 	return &service{
-		dbhash:    dbhash,
+		db:        db,
 		translate: translate,
 	}
 }
@@ -52,13 +52,13 @@ func (s *service) Translate(inputFolder string, outputFolder string) error {
 		return fmt.Errorf("failed to unmarshal input file '%s': %w", inputFile, err)
 	}
 
-	hashExists, err := s.dbhash.Exists(inputFile)
+	hashExists, err := s.db.Exists(inputFile)
 	if err != nil {
 		return fmt.Errorf("failed to check if the file '%s' exists in the database: %w", inputFile, err)
 	}
 
 	if hashExists != nil {
-		equals, err := s.dbhash.Compare(hashExists, inputFile)
+		equals, err := s.db.Compare(hashExists, inputFile)
 		if err != nil {
 			return fmt.Errorf("failed to compare the hash of the file '%s' with the database: %w", inputFile, err)
 		}
@@ -102,7 +102,7 @@ func (s *service) Translate(inputFolder string, outputFolder string) error {
 		return fmt.Errorf("failed to write output file '%s': %w", outputFile, err)
 	}
 
-	if err := s.dbhash.Store(inputFile); err != nil {
+	if err := s.db.Store(inputFile); err != nil {
 		return fmt.Errorf("failed to store the hash of the file '%s' in the database: %w", inputFile, err)
 	}
 

@@ -1,6 +1,12 @@
 version: 0.0.1
+engine:
+  google_translate:
+    enabled: false
+  open_ai:
+    enabled: true
+    api_key: your-api-key
 translate:
-  laserio:
+  laser_io:
     from: en_us
     to: pt_br
     lang:

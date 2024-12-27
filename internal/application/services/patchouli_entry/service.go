@@ -7,32 +7,32 @@ import (
 	"path/filepath"
 	"reflect"
 
-	"github.com/jfelipearaujo/gominelang/internal/application/services/dbhash"
-	"github.com/jfelipearaujo/gominelang/internal/application/services/translate"
-	"github.com/jfelipearaujo/gominelang/internal/application/services/translate_tag"
+	"github.com/jfelipearaujo/gominelang/internal/application/services/db"
+	"github.com/jfelipearaujo/gominelang/internal/application/services/tag"
+	"github.com/jfelipearaujo/gominelang/internal/application/services/translation/engine"
 	"github.com/jfelipearaujo/gominelang/internal/domain"
 )
 
 type service struct {
-	dbhash        dbhash.Service
-	translate     translate.Service
-	translate_tag translate_tag.Service
+	db        db.Service
+	translate engine.Service
+	tag       tag.Service
 }
 
 func New(
-	dbhash dbhash.Service,
-	translate translate.Service,
-	translate_tag translate_tag.Service,
+	db db.Service,
+	translate engine.Service,
+	tag tag.Service,
 ) Service {
 	return &service{
-		dbhash:        dbhash,
-		translate:     translate,
-		translate_tag: translate_tag,
+		db:        db,
+		translate: translate,
+		tag:       tag,
 	}
 }
 
 func (s *service) SetLang(fromLang string, toLang string) {
-	s.translate_tag.SetLang(fromLang, toLang)
+	s.tag.SetLang(fromLang, toLang)
 }
 
 func (s *service) Translate(inputFile string, outputFile string) error {
@@ -52,13 +52,13 @@ func (s *service) Translate(inputFile string, outputFile string) error {
 		return fmt.Errorf("failed to unmarshal input file '%s': %w", inputFile, err)
 	}
 
-	hashExists, err := s.dbhash.Exists(inputFile)
+	hashExists, err := s.db.Exists(inputFile)
 	if err != nil {
 		return fmt.Errorf("failed to check if the file '%s' exists in the database: %w", inputFile, err)
 	}
 
 	if hashExists != nil {
-		equals, err := s.dbhash.Compare(hashExists, inputFile)
+		equals, err := s.db.Compare(hashExists, inputFile)
 		if err != nil {
 			return fmt.Errorf("failed to compare the hash of the file '%s' with the database: %w", inputFile, err)
 		}
@@ -69,7 +69,7 @@ func (s *service) Translate(inputFile string, outputFile string) error {
 		}
 	}
 
-	fmt.Printf("Changes detected, translating...\n")
+	fmt.Printf("Changes detected, translating entry '%s'...\n", filepath.Base(inputFile))
 
 	if _, err := os.Stat(outputFile); err == nil {
 		outputData, err := os.ReadFile(outputFile)
@@ -88,18 +88,18 @@ func (s *service) Translate(inputFile string, outputFile string) error {
 
 	output.MapFrom(&input)
 
-	if err := s.translate_tag.HandleTranslation(&output); err != nil {
+	if err := s.tag.HandleTranslation(&output); err != nil {
 		return fmt.Errorf("failed to translate: %w", err)
 	}
 
 	for i := 0; i < len(output.Pages); i++ {
 		if output.Pages[i].Title != nil {
-			out := s.translate.FixWrongTranslation(*input.Pages[i].Title, *output.Pages[i].Title)
+			out := s.tag.FixWrongTranslation(*input.Pages[i].Title, *output.Pages[i].Title)
 			output.Pages[i].Title = &out
 		}
 
 		if output.Pages[i].Text != nil {
-			out := s.translate.FixWrongTranslation(*input.Pages[i].Text, *output.Pages[i].Text)
+			out := s.tag.FixWrongTranslation(*input.Pages[i].Text, *output.Pages[i].Text)
 			output.Pages[i].Text = &out
 		}
 	}
@@ -113,7 +113,7 @@ func (s *service) Translate(inputFile string, outputFile string) error {
 		return fmt.Errorf("failed to write output file '%s': %w", outputFile, err)
 	}
 
-	if err := s.dbhash.Store(inputFile); err != nil {
+	if err := s.db.Store(inputFile); err != nil {
 		return fmt.Errorf("failed to store the hash of the file '%s' in the database: %w", inputFile, err)
 	}
 

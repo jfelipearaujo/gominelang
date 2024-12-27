@@ -2,7 +2,22 @@ package domain
 
 type Config struct {
 	Version   string               `yaml:"version" validate:"required"`
+	Engine    *Engine              `yaml:"engine" validate:"required"`
 	Translate map[string]Translate `yaml:"translate" validate:"required,dive"`
+}
+
+type Engine struct {
+	GoogleTranslate *GoogleTranslate `yaml:"google_translate"`
+	OpenAI          *OpenAI          `yaml:"open_ai"`
+}
+
+type GoogleTranslate struct {
+	Enabled bool `yaml:"enabled"`
+}
+
+type OpenAI struct {
+	Enabled bool   `yaml:"enabled"`
+	APIKey  string `yaml:"api_key" validate:"required_if=Enabled true"`
 }
 
 type Translate struct {

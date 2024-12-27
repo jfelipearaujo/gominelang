@@ -1,14 +1,25 @@
-package translate
+package tag
 
-// Service responsible to translate text
+// Service responsible to handle the translation of tags
 type Service interface {
-	// Translate the text from the 'from' language to the 'to' language
+	// Define the language to translate from and to
 	//
 	// Example:
-	//   - from: en_us
-	//   - to: pt_br
-	//   - text: Hello world!
-	Translate(from string, to string, text string) (string, error)
+	//   - fromLang: en_us
+	//   - toLang: pt_br
+	SetLang(fromLang string, toLang string)
+
+	// Receives the input struct and translates all the fields that have the "translate" tag
+	//
+	// Example:
+	//
+	//		type myStruct struct {
+	//		  Title string `json:"title" translate:"true"`
+	//		  Text  string `json:"text"`
+	//		}
+	//
+	//	Output: The value of the "title" field will be translated to the desired language
+	HandleTranslation(input interface{}) error
 
 	// Fix wrong translations given the original and translated text against the tags
 	// that are not translated correctly

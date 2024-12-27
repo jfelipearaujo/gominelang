@@ -32,3 +32,6 @@ go.work.sum
 
 # bin folder
 /bin
+
+# config file
+.gominelang.yaml

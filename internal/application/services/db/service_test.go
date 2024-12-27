@@ -1,11 +1,11 @@
-package dbhash_test
+package db_test
 
 import (
 	"os"
 	"testing"
 	"time"
 
-	"github.com/jfelipearaujo/gominelang/internal/application/services/dbhash"
+	"github.com/jfelipearaujo/gominelang/internal/application/services/db"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -16,7 +16,7 @@ func TestExists(t *testing.T) {
 
 		file := "./testdata/testfile.txt"
 
-		sut := dbhash.New()
+		sut := db.New()
 
 		err := sut.Open()
 		assert.NoError(t, err)
@@ -39,7 +39,7 @@ func TestExists(t *testing.T) {
 
 		file := "./testdata/testfile.txt"
 
-		sut := dbhash.New()
+		sut := db.New()
 
 		err := sut.Open()
 		assert.NoError(t, err)
@@ -61,7 +61,7 @@ func TestCompare(t *testing.T) {
 
 		file := "./testdata/testfile.txt"
 
-		sut := dbhash.New()
+		sut := db.New()
 
 		err := sut.Open()
 		assert.NoError(t, err)
@@ -87,7 +87,7 @@ func TestCompare(t *testing.T) {
 
 		file := "./testdata/testfile.txt"
 
-		sut := dbhash.New()
+		sut := db.New()
 
 		err := sut.Open()
 		assert.NoError(t, err)
@@ -97,7 +97,7 @@ func TestCompare(t *testing.T) {
 		assert.NoError(t, err)
 
 		// Act
-		res, err := sut.Compare(&dbhash.FileHash{
+		res, err := sut.Compare(&db.FileHash{
 			Hash: "1234567890",
 		}, file)
 
@@ -114,7 +114,7 @@ func TestStore(t *testing.T) {
 
 		file := "./testdata/testfile.txt"
 
-		sut := dbhash.New()
+		sut := db.New()
 
 		err := sut.Open()
 		assert.NoError(t, err)
@@ -137,7 +137,7 @@ func TestStore(t *testing.T) {
 		err := os.WriteFile(file, newContent, 0644)
 		assert.NoError(t, err)
 
-		sut := dbhash.New()
+		sut := db.New()
 
 		err = sut.Open()
 		assert.NoError(t, err)

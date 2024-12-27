@@ -57,7 +57,7 @@ func (s *service) Translate(inputFolder string, outputFolder string) error {
 			return nil
 		}
 
-		parentFolders := strings.Split(strings.TrimSuffix(path, filepath.Base(path)), "/")
+		parentFolders := strings.Split(path, string(os.PathSeparator))
 		parentFolder := parentFolders[len(parentFolders)-2]
 
 		output := fmt.Sprintf("%s/%s", outputFolder, parentFolder)

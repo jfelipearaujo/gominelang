@@ -1,4 +1,4 @@
-package base_lang
+package lang
 
 // Service responsible to merge lang files and translate each one
 //

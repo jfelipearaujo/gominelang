@@ -1,20 +1,24 @@
-package translate_tag
+package tag
 
 import (
 	"fmt"
 	"reflect"
+	"regexp"
+	"strings"
 
-	"github.com/jfelipearaujo/gominelang/internal/application/services/translate"
+	"github.com/jfelipearaujo/gominelang/internal/application/services/translation/engine"
 )
 
+var tagRegex = regexp.MustCompile(`(\$\(l:[a-zA-Z_]+:[a-zA-Z_]+\))`)
+
 type service struct {
-	translate translate.Service
+	translate engine.Service
 
 	fromLang string
 	toLang   string
 }
 
-func New(translate translate.Service) Service {
+func New(translate engine.Service) Service {
 	return &service{
 		translate: translate,
 	}
@@ -79,4 +83,38 @@ func (s *service) HandleTranslation(input interface{}) error {
 	}
 
 	return nil
+}
+
+func (s *service) FixWrongTranslation(original string, translated string) string {
+	originalTags := []string{}
+	matches := tagRegex.FindAllStringSubmatch(original, -1)
+	for _, match := range matches {
+		if len(match) > 1 {
+			originalTags = append(originalTags, match[1])
+		}
+	}
+
+	translatedTags := []string{}
+	matches = tagRegex.FindAllStringSubmatch(translated, -1)
+	for _, match := range matches {
+		if len(match) > 1 {
+			translatedTags = append(translatedTags, match[1])
+		}
+	}
+
+	if len(originalTags) != len(translatedTags) {
+		return translated
+	}
+
+	result := translated
+
+	for i, originalTag := range originalTags {
+		translatedTag := translatedTags[i]
+
+		if originalTag != translatedTag {
+			result = strings.ReplaceAll(result, translatedTag, originalTag)
+		}
+	}
+
+	return result
 }
